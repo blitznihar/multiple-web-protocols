@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 
 import grpc
-import warnings # noqa: F401 (Ignore "unused import" for this line only)
+import warnings  # noqa: F401 (Ignore "unused import" for this line only)
 
 from . import customer_pb2 as customer__pb2
 
