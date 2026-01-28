@@ -78,3 +78,8 @@ jobs:
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          report_format: sarif
+          report_path: results.sarif
+          artifact_name: gitleaks-sarif-${{ github.job }}-${{ github.run_attempt }}
+
