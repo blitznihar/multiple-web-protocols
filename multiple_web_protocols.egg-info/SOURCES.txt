@@ -32,9 +32,12 @@ rest/__main__.py
 rest/app.py
 soap/__init__.py
 soap/__main__.py
+soap/customer_service.py
 sse/__init__.py
 sse/__main__.py
 tests/test_customer_db.py
+tests/test_customer_service.py
+tests/test_envconfig.py
 tests/test_grpc_server.py
 tests/test_rest_app.py
 webhook/__init__.py

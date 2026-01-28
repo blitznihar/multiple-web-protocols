@@ -15,7 +15,8 @@ The goal is to show how the same domain and persistence layer (a small customer 
 
 - A fully implemented **gRPC** service
 - A fully implemented **REST** API (FastAPI)
-- Planned/placeholder entry points for **WebSocket**, **Webhook**, **GraphQL**, and **MCP** (Model Context Protocol)
+- A fully implemented **SOAP** service (using Spyne)
+- Planned/placeholder entry points for **WebSocket**, **Webhook**, **GraphQL**, **MCP** (Model Context Protocol), **AMQP**, **MQTT**, and **SSE**
 
 All variants share the same MongoDB-backed `CustomerDB` abstraction for CRUD operations.
 
@@ -49,6 +50,14 @@ All variants share the same MongoDB-backed `CustomerDB` abstraction for CRUD ope
 			- `POST /customers` – create a new customer (409 on duplicate `customerid`).
 			- `PUT /customers/{customerid}` – update basic fields and nested address.
 			- `DELETE /customers/{customerid}` – delete a customer.
+	- **SOAP** (implemented)
+		- Spyne-based SOAP service in `soap/customer_service.py` exposing WSDL and SOAP operations.
+		- Uses the same `CustomerDB` for CRUD operations.
+		- Operations:
+			- `create_customer` – create a new customer.
+			- `get_customer` – fetch a customer by ID.
+			- `update_customer_email` – update a customer's email.
+			- `delete_customer` – delete a customer by ID.
 	- **WebSocket** (placeholder)
 		- `websocket/__main__.py` currently prints a greeting and is a scaffold for a future WebSocket implementation.
 	- **Webhook** (placeholder)
@@ -57,6 +66,12 @@ All variants share the same MongoDB-backed `CustomerDB` abstraction for CRUD ope
 		- `graphql/__main__.py` currently prints a greeting and will eventually host a GraphQL API for the same `Customer` domain.
 	- **MCP** (placeholder)
 		- `mcp/__main__.py` is a placeholder for exposing the customer service via the Model Context Protocol.
+	- **AMQP** (placeholder)
+		- `amqp/__main__.py` is a placeholder for AMQP-based messaging.
+	- **MQTT** (placeholder)
+		- `mqtt/__main__.py` is a placeholder for MQTT-based messaging.
+	- **SSE** (placeholder)
+		- `sse/__main__.py` is a placeholder for Server-Sent Events.
 
 - **Top-level demo**
 	- `__main__.py` demonstrates the raw usage of `CustomerDB` (create, read, list, update, delete) when you run the project directly.
@@ -182,14 +197,40 @@ At a high level, the service supports:
 - `UpdateCustomer` – partial updates on basic fields and nested address fields.
 - `DeleteCustomer` – delete a customer by `customerid`.
 
+## Running the SOAP Service
+
+From the project root:
+
+```bash
+uv run soap
+```
+
+This starts a Spyne SOAP server, by default on `http://0.0.0.0:8067`, via `soap.__main__.py`.
+
+The WSDL is available at: `http://localhost:8067/?wsdl`
+
+Example operations (using a SOAP client or tools like SoapUI):
+
+- `create_customer` – create a new customer.
+- `get_customer` – fetch a customer by ID.
+- `update_customer_email` – update a customer's email.
+- `delete_customer` – delete a customer by ID.
+
 ## Running Other Protocol Entry Points
 
 These modules are currently simple placeholders that just print a greeting, but the project wiring is already in place via `pyproject.toml` script entries:
 
 ```bash
-uv run grpc       # mapped to grpc_service:main (once main is implemented)
-uv run websocket  # mapped to websocket:main
-uv run mcp        # mapped to mcp:main
+uv run grpc       # mapped to grpc_service:main (implemented)
+uv run rest       # mapped to rest:main (implemented)
+uv run soap       # mapped to soap:main (implemented)
+uv run websocket  # mapped to websocket:main (placeholder)
+uv run webhook    # mapped to webhook:main (placeholder)
+uv run graphql    # mapped to graphql:main (placeholder)
+uv run mcp        # mapped to mcp:main (placeholder)
+uv run amqp       # mapped to amqp:main (placeholder)
+uv run mqtt       # mapped to mqtt:main (placeholder)
+uv run sse        # mapped to sse:main (placeholder)
 ```
 
 You can use these as starting points to flesh out full implementations for each protocol while reusing the shared `CustomerDB` persistence layer.
@@ -217,6 +258,7 @@ The test suite currently includes:
 - gRPC service and helper tests in `tests/test_grpc_server.py` (service logic and status codes).
 - MongoDB persistence tests in `tests/test_customer_db.py` using an in-memory fake `MongoClient`.
 - REST API tests in `tests/test_rest_app.py` using FastAPI's `TestClient` and a fake `CustomerDB`.
+- SOAP service tests in `tests/test_customer_service.py` using mocked `CustomerDB`.
 - Environment configuration tests in `tests/test_envconfig.py` for `config/envconfig.py` properties.
 
 All tests can be run together with:
