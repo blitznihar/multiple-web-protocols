@@ -8,8 +8,9 @@ db/__init__.py
 db/address.py
 db/customer.py
 db/customer_db.py
-graphql/__init__.py
-graphql/__main__.py
+graphql_service/__init__.py
+graphql_service/__main__.py
+graphql_service/graphql_service.py
 grpc_service/__init__.py
 grpc_service/__main__.py
 grpc_service/client.py

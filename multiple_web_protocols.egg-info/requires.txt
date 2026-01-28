@@ -9,5 +9,6 @@ pymongo>=4.16.0
 python-dotenv>=1.2.1
 pytz>=2025.2
 spyne>=2.14.0
+strawberry-graphql[fastapi]>=0.289.8
 types-protobuf>=6.32.1.20251210
 uvicorn>=0.24.0
