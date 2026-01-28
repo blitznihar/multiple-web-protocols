@@ -21,6 +21,20 @@ class CustomerDB:
         self.db = self.client[db_name]
         self.collection = self.db[collection_name]
 
+    def health_check(self) -> bool:
+        """
+        Docstring for health_check
+
+        :param self: Description
+        :return: Description
+        :rtype: bool
+        """
+        try:
+            self.client.admin.command("ping")
+            return True
+        except Exception:
+            return False
+
     # -------------------------
     # CREATE
     # -------------------------

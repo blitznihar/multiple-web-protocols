@@ -1,0 +1,5 @@
+[console_scripts]
+grpc = grpc_service:main
+mcp = mcp:main
+rest = rest.__main__:main
+websocket = websocket:main

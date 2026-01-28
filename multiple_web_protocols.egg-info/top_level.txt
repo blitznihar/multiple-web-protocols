@@ -1,0 +1,7 @@
+db
+graphql
+grpc_service
+mcp
+rest
+webhook
+websocket
