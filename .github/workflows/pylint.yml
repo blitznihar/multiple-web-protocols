@@ -80,6 +80,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           report_format: sarif
-          report_path: results.sarif
-          artifact_name: gitleaks-sarif-${{ github.job }}-${{ github.run_attempt }}
+          report_path: gitleaks-${{ github.sha }}.sarif
+          artifact_name: gitleaks-sarif-${{ github.run_id }}-${{ github.sha }}
 
