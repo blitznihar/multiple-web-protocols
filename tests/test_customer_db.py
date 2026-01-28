@@ -51,7 +51,9 @@ class FakeCollection:
         self.docs.append(doc)
         return FakeInsertOneResult(doc["_id"])
 
-    def find_one(self, filter: Dict[str, Any], projection: Optional[Dict[str, int]] = None):
+    def find_one(
+        self, filter: Dict[str, Any], projection: Optional[Dict[str, int]] = None
+    ):
         for doc in self.docs:
             if all(doc.get(k) == v for k, v in filter.items()):
                 result = dict(doc)
@@ -70,7 +72,9 @@ class FakeCollection:
                 results.append(item)
         return results
 
-    def update_one(self, filter: Dict[str, Any], update: Dict[str, Dict[str, Any]]) -> FakeUpdateResult:
+    def update_one(
+        self, filter: Dict[str, Any], update: Dict[str, Dict[str, Any]]
+    ) -> FakeUpdateResult:
         modified = 0
         if "$set" in update:
             for doc in self.docs:
@@ -141,7 +145,9 @@ def patched_mongo(monkeypatch) -> FakeMongoClient:
 # ---------------------------------------------------------------------------
 
 
-def test_create_customer_inserts_document_and_returns_id(patched_mongo: FakeMongoClient) -> None:
+def test_create_customer_inserts_document_and_returns_id(
+    patched_mongo: FakeMongoClient,
+) -> None:
     db = CustomerDB()
 
     customer = {
@@ -172,7 +178,9 @@ def test_get_customer_by_id_found(patched_mongo: FakeMongoClient) -> None:
     assert "_id" not in result
 
 
-def test_get_customer_by_id_not_found_returns_none(patched_mongo: FakeMongoClient) -> None:
+def test_get_customer_by_id_not_found_returns_none(
+    patched_mongo: FakeMongoClient,
+) -> None:
     db = CustomerDB()
 
     result = db.get_customer_by_id("missing")
@@ -194,7 +202,9 @@ def test_list_customers_returns_all_documents(patched_mongo: FakeMongoClient) ->
         assert "_id" not in c
 
 
-def test_update_customer_success_returns_true_and_updates_doc(patched_mongo: FakeMongoClient) -> None:
+def test_update_customer_success_returns_true_and_updates_doc(
+    patched_mongo: FakeMongoClient,
+) -> None:
     db = CustomerDB()
     collection: FakeCollection = db.collection  # type: ignore[assignment]
 
@@ -208,7 +218,9 @@ def test_update_customer_success_returns_true_and_updates_doc(patched_mongo: Fak
     assert doc["address"]["city"] == "Testville"
 
 
-def test_update_customer_not_found_returns_false(patched_mongo: FakeMongoClient) -> None:
+def test_update_customer_not_found_returns_false(
+    patched_mongo: FakeMongoClient,
+) -> None:
     db = CustomerDB()
 
     ok = db.update_customer("missing", {"lastname": "New"})
@@ -216,7 +228,9 @@ def test_update_customer_not_found_returns_false(patched_mongo: FakeMongoClient)
     assert ok is False
 
 
-def test_delete_customer_success_returns_true_and_removes_doc(patched_mongo: FakeMongoClient) -> None:
+def test_delete_customer_success_returns_true_and_removes_doc(
+    patched_mongo: FakeMongoClient,
+) -> None:
     db = CustomerDB()
     collection: FakeCollection = db.collection  # type: ignore[assignment]
 
@@ -228,7 +242,9 @@ def test_delete_customer_success_returns_true_and_removes_doc(patched_mongo: Fak
     assert collection.find_one({"customerid": "C1"}) is None
 
 
-def test_delete_customer_not_found_returns_false(patched_mongo: FakeMongoClient) -> None:
+def test_delete_customer_not_found_returns_false(
+    patched_mongo: FakeMongoClient,
+) -> None:
     db = CustomerDB()
 
     ok = db.delete_customer("missing")

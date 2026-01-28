@@ -173,9 +173,7 @@ def test_build_update_dict_includes_only_non_empty_fields():
 
 def make_service_with_fake_db(fake_db: FakeCustomerDB) -> grpc_server.CustomerService:
     # Bypass __init__ to avoid opening a real Mongo connection.
-    service = grpc_server.CustomerService.__new__(
-        grpc_server.CustomerService
-    )  # type: ignore[misc]
+    service = grpc_server.CustomerService.__new__(grpc_server.CustomerService)  # type: ignore[misc]
     service.db = fake_db  # type: ignore[assignment]
     return service
 
@@ -202,7 +200,9 @@ def test_create_customer_duplicate_sets_already_exists():
     service = make_service_with_fake_db(fake_db)
     ctx = DummyContext()
 
-    req = customer_pb2.CreateCustomerRequest(customer=make_customer_msg(customerid="C1"))
+    req = customer_pb2.CreateCustomerRequest(
+        customer=make_customer_msg(customerid="C1")
+    )
 
     resp = service.CreateCustomer(req, ctx)
 
@@ -232,7 +232,9 @@ def test_create_customer_success():
     service = make_service_with_fake_db(fake_db)
     ctx = DummyContext()
 
-    req = customer_pb2.CreateCustomerRequest(customer=make_customer_msg(customerid="C123"))
+    req = customer_pb2.CreateCustomerRequest(
+        customer=make_customer_msg(customerid="C123")
+    )
 
     resp = service.CreateCustomer(req, ctx)
 
@@ -306,7 +308,9 @@ def test_update_customer_not_found_sets_not_found():
     service = make_service_with_fake_db(fake_db)
     ctx = DummyContext()
 
-    req = customer_pb2.UpdateCustomerRequest(customerid="C1", customer=make_customer_msg())
+    req = customer_pb2.UpdateCustomerRequest(
+        customerid="C1", customer=make_customer_msg()
+    )
 
     resp = service.UpdateCustomer(req, ctx)
 
