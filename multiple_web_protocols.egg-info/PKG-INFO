@@ -2,17 +2,21 @@ Metadata-Version: 2.4
 Name: multiple-web-protocols
 Version: 0.1.0
 Summary: Add your description here
-Requires-Python: >=3.14
+Requires-Python: >=3.11
 Description-Content-Type: text/markdown
 Requires-Dist: email-validator>=2.3.0
-Requires-Dist: fastapi>=0.128.0
+Requires-Dist: fastapi>=0.104.1
 Requires-Dist: grpcio>=1.76.0
 Requires-Dist: grpcio-tools>=1.76.0
+Requires-Dist: gunicorn>=24.1.1
+Requires-Dist: lxml>=6.0.2
 Requires-Dist: pydantic>=2.12.5
 Requires-Dist: pymongo>=4.16.0
 Requires-Dist: python-dotenv>=1.2.1
+Requires-Dist: pytz>=2025.2
+Requires-Dist: spyne>=2.14.0
 Requires-Dist: types-protobuf>=6.32.1.20251210
-Requires-Dist: uvicorn>=0.40.0
+Requires-Dist: uvicorn>=0.24.0
 
 # Multiple Web Protocols
 
@@ -223,6 +227,21 @@ Run linters and tests:
 ```bash
 uv run ruff check .
 uv run pylint multiple-web-protocols  # or the relevant package path
+uv run pytest
+```
+
+### Test Coverage
+
+The test suite currently includes:
+
+- gRPC service and helper tests in `tests/test_grpc_server.py` (service logic and status codes).
+- MongoDB persistence tests in `tests/test_customer_db.py` using an in-memory fake `MongoClient`.
+- REST API tests in `tests/test_rest_app.py` using FastAPI's `TestClient` and a fake `CustomerDB`.
+- Environment configuration tests in `tests/test_envconfig.py` for `config/envconfig.py` properties.
+
+All tests can be run together with:
+
+```bash
 uv run pytest
 ```
 
