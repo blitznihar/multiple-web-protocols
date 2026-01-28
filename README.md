@@ -1,7 +1,7 @@
 # Multiple Web Protocols
 
 [![CI (lint + test)](https://github.com/blitznihar/multiple-web-protocols/actions/workflows/pylint.yml/badge.svg)](https://github.com/blitznihar/multiple-web-protocols/actions/workflows/pylint.yml)
-[![codecov](https://codecov.io/github/blitznihar/multiple-web-protocols/graph/badge.svg?token=CxxB9Ew6Lx)](https://codecov.io/github/blitznihar/multiple-web-protocols)
+[![codecov](https://codecov.io/github/blitznihar/multiple-web-protocols/graph/badge.svg?token=WQj9qZBFhi)](https://codecov.io/github/blitznihar/multiple-web-protocols)
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![Last Commit](https://img.shields.io/github/last-commit/blitznihar/multiple-web-protocols)
 ![License](https://img.shields.io/github/license/blitznihar/multiple-web-protocols?cacheSeconds=0)
