@@ -13,9 +13,9 @@ class CustomerDB:
 
     def __init__(
         self,
-        uri: str = "mongodb://localhost:27017",
-        db_name: str = "customerdb",
-        collection_name: str = "customers",
+        uri: str,
+        db_name: str,
+        collection_name: str,
     ):
         self.client = MongoClient(uri)
         self.db = self.client[db_name]

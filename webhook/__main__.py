@@ -1,4 +1,12 @@
+"""
+Docstring for webhook.__main__
+"""
+
+
 def main():
+    """
+    Docstring for main
+    """
     print("Hello from webhook!")
 
 

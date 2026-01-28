@@ -1,0 +1,142 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: gRPCTest
+meta:
+  id: wrk_0d078adfa63b432dad08e3375225bc27
+  created: 1769580273405
+  modified: 1769580987483
+  description: ""
+collection:
+  - url: localhost:8060/customers
+    name: RestCreateCustomer
+    meta:
+      id: req_5fa77644c2b140159e96e61aee363e0d
+      created: 1769581057808
+      modified: 1769587497520
+      isPrivate: false
+      description: ""
+      sortKey: -1769581057808
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"customerid": "20021",
+        	"firstname": "Nihar",
+        	"lastname": "Malali",
+        	"email": "nihar21@example.com",
+        	"phone": "+1-999-1111",
+        	"address": {
+        		"street": "1 Test St",
+        		"city": "McKinney",
+        		"state": "TX",
+        		"zip": "75071",
+        		"country": "USA"
+        	}
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:8060/customers/20021
+    name: RestGetCustomer
+    meta:
+      id: req_a050d900e2184834b30d569a39ce5638
+      created: 1769587502118
+      modified: 1769587573728
+      isPrivate: false
+      description: ""
+      sortKey: -1769587502118
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:50051
+    name: CreateCustomer
+    meta:
+      id: greq_55ab32c6642141fab2b9e11039d6c7c6
+      created: 1769580355489
+      modified: 1769581945462
+      isPrivate: false
+      description: ""
+      sortKey: -1769580355489
+    body:
+      text: |-
+        {
+        	"customer": {
+        		"customerid": "20011",
+        		"firstname": "Nihar",
+        		"lastname": "Malali",
+        		"email": "nihar1@example.com",
+        		"phone": "+1-999-1111",
+        		"address": {
+        			"street": "1 Test St",
+        			"city": "McKinney",
+        			"state": "TX",
+        			"zip": "75071",
+        			"country": "USA"
+        		}
+        	}
+        }
+    protoFileId: pf_6a9685309b964acf9769027bf07bc22f
+    protoMethodName: /customer.CustomerService/CreateCustomer
+    reflectionApi:
+      enabled: false
+      url: https://buf.build
+      apiKey: ""
+      module: buf.build/connectrpc/eliza
+  - url: localhost:50051
+    name: GetCustomerById
+    meta:
+      id: greq_66771ef2a85d4223a31bf9788426416c
+      created: 1769580709237
+      modified: 1769581955432
+      isPrivate: false
+      description: ""
+      sortKey: -1769580709237
+    body:
+      text: |-
+        {
+        	"customerid": "20011"
+        }
+    protoFileId: pf_289bf553e65d404d9215b36a255b53aa
+    protoMethodName: /customer.CustomerService/GetCustomerById
+    reflectionApi:
+      enabled: false
+      url: https://buf.build
+      apiKey: ""
+      module: buf.build/connectrpc/eliza
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_7583afad14630caafca977cf839029b3a2b75d38
+    created: 1769580273409
+    modified: 1769580273409
+environments:
+  name: Base Environment
+  meta:
+    id: env_7583afad14630caafca977cf839029b3a2b75d38
+    created: 1769580273408
+    modified: 1769580273408
+    isPrivate: false

@@ -1,5 +1,5 @@
 """
-Docstring for websocket.__main__
+Docstring for soap.__main__
 """
 
 
@@ -7,7 +7,7 @@ def main():
     """
     Docstring for main
     """
-    print("Hello from web socket!")
+    print("Starting SOAP server...")
 
 
 if __name__ == "__main__":

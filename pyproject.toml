@@ -22,12 +22,14 @@ dependencies = [
 grpc = "grpc_service:main"
 websocket = "websocket:main"
 mcp = "mcp:main"
-rest = "rest.__main__:main"
+rest = "rest:main"
+graphql = "graphql:main"
+webhook = "webhook:main"
+amqp = "amqp:main"
+sse = "sse:main"
+mqtt = "mqtt:main"
+soap = "soap:main"
 
-[tool.uv.workspace]
-members = [
-    "grpc",
-]
 
 [dependency-groups]
 dev = [
@@ -49,5 +51,5 @@ include-package-data = false
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["rest*", "db*", "grpc_service*", "webhook*", "graphql*", "websocket*", "mcp*"]
+include = ["rest*", "db*", "grpc_service*", "webhook*", "graphql*", "websocket*", "mcp*", "amqp*", "sse*", "mqtt*", "soap*", "config*"]
 exclude = ["data*"]

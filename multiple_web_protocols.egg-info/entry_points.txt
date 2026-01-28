@@ -1,5 +1,11 @@
 [console_scripts]
+amqp = amqp:main
+graphql = graphql:main
 grpc = grpc_service:main
 mcp = mcp:main
-rest = rest.__main__:main
+mqtt = mqtt:main
+rest = rest:main
+soap = soap:main
+sse = sse:main
+webhook = webhook:main
 websocket = websocket:main

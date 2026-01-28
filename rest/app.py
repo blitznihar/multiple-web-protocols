@@ -6,6 +6,7 @@ from typing import Optional, List, Dict
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, EmailStr
 from db.customer_db import CustomerDB
+from config.envconfig import EnvConfig
 
 
 # ---------- Pydantic Models ----------
@@ -49,7 +50,10 @@ class CustomerUpdate(BaseModel):
 # ---------- App ----------
 app = FastAPI(title="Customer API", version="1.0.0")
 
-db = CustomerDB()
+uri = EnvConfig().database_url
+db_name = EnvConfig().db_name
+collection_name = EnvConfig().collection_name
+db = CustomerDB(uri=uri, db_name=db_name, collection_name=collection_name)
 
 
 @app.get("/health")

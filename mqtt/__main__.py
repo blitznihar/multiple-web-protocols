@@ -1,5 +1,5 @@
 """
-Docstring for websocket.__main__
+Docstring for mqtt.__main__
 """
 
 
@@ -7,7 +7,7 @@ def main():
     """
     Docstring for main
     """
-    print("Hello from web socket!")
+    print("Starting MQTT server...")
 
 
 if __name__ == "__main__":

@@ -1,7 +1,12 @@
+amqp
+config
 db
 graphql
 grpc_service
 mcp
+mqtt
 rest
+soap
+sse
 webhook
 websocket

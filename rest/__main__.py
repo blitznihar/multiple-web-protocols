@@ -3,15 +3,19 @@ Docstring for rest.__main__
 """
 
 import uvicorn
+from config.envconfig import EnvConfig
 
 
 def main():
     """
     Docstring for main
     """
-    print("Starting REST API server...")
+    config = EnvConfig()
+    port = config.restapi_port
+    host = config.host
+    print(f"Starting REST API server on {host}:{port}...")
 
-    uvicorn.run("rest.app:app", host="0.0.0.0", port=8060, reload=True)
+    uvicorn.run("rest.app:app", host=host, port=port, reload=True)
 
 
 if __name__ == "__main__":

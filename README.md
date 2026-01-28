@@ -210,6 +210,21 @@ uv run pylint multiple-web-protocols  # or the relevant package path
 uv run pytest
 ```
 
+### Test Coverage
+
+The test suite currently includes:
+
+- gRPC service and helper tests in `tests/test_grpc_server.py` (service logic and status codes).
+- MongoDB persistence tests in `tests/test_customer_db.py` using an in-memory fake `MongoClient`.
+- REST API tests in `tests/test_rest_app.py` using FastAPI's `TestClient` and a fake `CustomerDB`.
+- Environment configuration tests in `tests/test_envconfig.py` for `config/envconfig.py` properties.
+
+All tests can be run together with:
+
+```bash
+uv run pytest
+```
+
 The repository is configured with a GitHub Actions workflow for linting and testing, and Codecov for coverage reporting.
 
 ## License

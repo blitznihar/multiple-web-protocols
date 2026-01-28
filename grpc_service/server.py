@@ -3,9 +3,10 @@ Docstring for grpc.server
 """
 
 from concurrent import futures
-from db.customer_db import CustomerDB
 import grpc
 from pymongo.errors import DuplicateKeyError
+from config.envconfig import EnvConfig
+from db.customer_db import CustomerDB
 from .customerpb import customer_pb2, customer_pb2_grpc  # type: ignore
 
 
@@ -88,8 +89,12 @@ def build_update_dict(customer: customer_pb2.Customer) -> dict:
 
 class CustomerService(customer_pb2_grpc.CustomerServiceServicer):
     def __init__(self):
-        mongo_uri = "mongodb://localhost:27017"
-        self.db = CustomerDB(uri=mongo_uri)
+        mongo_uri = EnvConfig().database_url
+        db_name = EnvConfig().db_name
+        collection_name = EnvConfig().collection_name
+        self.db = CustomerDB(
+            uri=mongo_uri, db_name=db_name, collection_name=collection_name
+        )
 
     def CreateCustomer(self, request, context):
         if not request.customer.customerid:
@@ -154,13 +159,13 @@ class CustomerService(customer_pb2_grpc.CustomerServiceServicer):
 
 
 def serve():
+    """
+    Docstring for serve
+    """
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     customer_pb2_grpc.add_CustomerServiceServicer_to_server(CustomerService(), server)
-    server.add_insecure_port("[::]:50051")
+    grpc_port = EnvConfig().grpc_port
+    server.add_insecure_port(f"[::]:{grpc_port}")
     server.start()
-    print("✅ gRPC server running on :50051")
+    print(f"✅ gRPC server running on :{grpc_port}")
     server.wait_for_termination()
-
-
-if __name__ == "__main__":
-    serve()

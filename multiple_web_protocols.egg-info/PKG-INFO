@@ -17,7 +17,7 @@ Requires-Dist: uvicorn>=0.40.0
 # Multiple Web Protocols
 
 [![CI (lint + test)](https://github.com/blitznihar/multiple-web-protocols/actions/workflows/pylint.yml/badge.svg)](https://github.com/blitznihar/multiple-web-protocols/actions/workflows/pylint.yml)
-[![codecov](https://codecov.io/github/blitznihar/multiple-web-protocols/graph/badge.svg?token=CxxB9Ew6Lx)](https://codecov.io/github/blitznihar/multiple-web-protocols)
+[![codecov](https://codecov.io/github/blitznihar/multiple-web-protocols/graph/badge.svg?token=WQj9qZBFhi)](https://codecov.io/github/blitznihar/multiple-web-protocols)
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![Last Commit](https://img.shields.io/github/last-commit/blitznihar/multiple-web-protocols)
 ![License](https://img.shields.io/github/license/blitznihar/multiple-web-protocols?cacheSeconds=0)
@@ -30,6 +30,7 @@ This repository is a learning/demo project that implements a simple **Customer**
 The goal is to show how the same domain and persistence layer (a small customer database) can be accessed through different integration styles:
 
 - A fully implemented **gRPC** service
+- A fully implemented **REST** API (FastAPI)
 - Planned/placeholder entry points for **WebSocket**, **Webhook**, **GraphQL**, and **MCP** (Model Context Protocol)
 
 All variants share the same MongoDB-backed `CustomerDB` abstraction for CRUD operations.
@@ -54,6 +55,16 @@ All variants share the same MongoDB-backed `CustomerDB` abstraction for CRUD ope
 		- Generated code in `grpc_service/customerpb/`.
 		- Server implementation in `grpc_service/server.py` wrapping `CustomerDB`.
 		- Exposes CRUD RPCs: `CreateCustomer`, `GetCustomerById`, `UpdateCustomer`, `DeleteCustomer`.
+	- **REST API** (implemented)
+		- FastAPI application in `rest/app.py` exposing JSON endpoints over HTTP.
+		- Uses the same `CustomerDB` to back CRUD operations.
+		- Endpoints:
+			- `GET /health` – basic app + MongoDB health-check.
+			- `GET /customers` – list all customers.
+			- `GET /customers/{customerid}` – fetch a single customer.
+			- `POST /customers` – create a new customer (409 on duplicate `customerid`).
+			- `PUT /customers/{customerid}` – update basic fields and nested address.
+			- `DELETE /customers/{customerid}` – delete a customer.
 	- **WebSocket** (placeholder)
 		- `websocket/__main__.py` currently prints a greeting and is a scaffold for a future WebSocket implementation.
 	- **Webhook** (placeholder)
@@ -120,6 +131,32 @@ uv run .
 ```
 
 will run the package's `__main__.py` and execute the simple `CustomerDB` CRUD demo.
+
+## Running the REST API
+
+From the project root:
+
+```bash
+uv run rest
+```
+
+This starts a FastAPI/Uvicorn server, by default on `http://0.0.0.0:8060`, via `rest.__main__.py`.
+
+Example requests (using `curl`):
+
+```bash
+curl http://localhost:8060/health
+curl http://localhost:8060/customers
+curl -X POST http://localhost:8060/customers \
+	-H "Content-Type: application/json" \
+	-d '{
+				"customerid": "C1",
+				"firstname": "Alice",
+				"lastname": "Smith",
+				"email": "alice@example.com",
+				"phone": "+1-555-0000"
+			}'
+```
 
 ## Running the gRPC Service
 

@@ -148,7 +148,10 @@ def patched_mongo(monkeypatch) -> FakeMongoClient:
 def test_create_customer_inserts_document_and_returns_id(
     patched_mongo: FakeMongoClient,
 ) -> None:
-    db = CustomerDB()
+    uri = "mongodb://fake"
+    db_name = "testdb"
+    collection_name = "customers"
+    db = CustomerDB(uri=uri, db_name=db_name, collection_name=collection_name)
 
     customer = {
         "customerid": "C1",
@@ -165,7 +168,10 @@ def test_create_customer_inserts_document_and_returns_id(
 
 
 def test_get_customer_by_id_found(patched_mongo: FakeMongoClient) -> None:
-    db = CustomerDB()
+    uri = "mongodb://fake"
+    db_name = "testdb"
+    collection_name = "customers"
+    db = CustomerDB(uri=uri, db_name=db_name, collection_name=collection_name)
 
     collection: FakeCollection = db.collection  # type: ignore[assignment]
     collection.insert_one({"customerid": "C1", "firstname": "Alice", "_id": 1})
@@ -181,7 +187,10 @@ def test_get_customer_by_id_found(patched_mongo: FakeMongoClient) -> None:
 def test_get_customer_by_id_not_found_returns_none(
     patched_mongo: FakeMongoClient,
 ) -> None:
-    db = CustomerDB()
+    uri = "mongodb://fake"
+    db_name = "testdb"
+    collection_name = "customers"
+    db = CustomerDB(uri=uri, db_name=db_name, collection_name=collection_name)
 
     result = db.get_customer_by_id("missing")
 
@@ -189,7 +198,10 @@ def test_get_customer_by_id_not_found_returns_none(
 
 
 def test_list_customers_returns_all_documents(patched_mongo: FakeMongoClient) -> None:
-    db = CustomerDB()
+    uri = "mongodb://fake"
+    db_name = "testdb"
+    collection_name = "customers"
+    db = CustomerDB(uri=uri, db_name=db_name, collection_name=collection_name)
     collection: FakeCollection = db.collection  # type: ignore[assignment]
 
     collection.insert_one({"customerid": "C1", "firstname": "Alice"})
@@ -205,7 +217,10 @@ def test_list_customers_returns_all_documents(patched_mongo: FakeMongoClient) ->
 def test_update_customer_success_returns_true_and_updates_doc(
     patched_mongo: FakeMongoClient,
 ) -> None:
-    db = CustomerDB()
+    uri = "mongodb://fake"
+    db_name = "testdb"
+    collection_name = "customers"
+    db = CustomerDB(uri=uri, db_name=db_name, collection_name=collection_name)
     collection: FakeCollection = db.collection  # type: ignore[assignment]
 
     collection.insert_one({"customerid": "C1", "lastname": "Old"})
@@ -221,7 +236,10 @@ def test_update_customer_success_returns_true_and_updates_doc(
 def test_update_customer_not_found_returns_false(
     patched_mongo: FakeMongoClient,
 ) -> None:
-    db = CustomerDB()
+    uri = "mongodb://fake"
+    db_name = "testdb"
+    collection_name = "customers"
+    db = CustomerDB(uri=uri, db_name=db_name, collection_name=collection_name)
 
     ok = db.update_customer("missing", {"lastname": "New"})
 
@@ -231,7 +249,10 @@ def test_update_customer_not_found_returns_false(
 def test_delete_customer_success_returns_true_and_removes_doc(
     patched_mongo: FakeMongoClient,
 ) -> None:
-    db = CustomerDB()
+    uri = "mongodb://fake"
+    db_name = "testdb"
+    collection_name = "customers"
+    db = CustomerDB(uri=uri, db_name=db_name, collection_name=collection_name)
     collection: FakeCollection = db.collection  # type: ignore[assignment]
 
     collection.insert_one({"customerid": "C1"})
@@ -245,7 +266,10 @@ def test_delete_customer_success_returns_true_and_removes_doc(
 def test_delete_customer_not_found_returns_false(
     patched_mongo: FakeMongoClient,
 ) -> None:
-    db = CustomerDB()
+    uri = "mongodb://fake"
+    db_name = "testdb"
+    collection_name = "customers"
+    db = CustomerDB(uri=uri, db_name=db_name, collection_name=collection_name)
 
     ok = db.delete_customer("missing")
 
@@ -253,7 +277,10 @@ def test_delete_customer_not_found_returns_false(
 
 
 def test_close_calls_underlying_client_close(patched_mongo: FakeMongoClient) -> None:
-    db = CustomerDB()
+    uri = "mongodb://fake"
+    db_name = "testdb"
+    collection_name = "customers"
+    db = CustomerDB(uri=uri, db_name=db_name, collection_name=collection_name)
 
     db.close()
 
