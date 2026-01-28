@@ -5,16 +5,14 @@ from __future__ import annotations
 from typing import Any, Dict, Optional
 from pathlib import Path
 import sys
-
 import grpc
+from grpc_service.customerpb import customer_pb2
+from grpc_service import server as grpc_server
 
 # Ensure project root (where grpc_service lives) is on sys.path when running tests.
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
-
-from grpc_service.customerpb import customer_pb2
-from grpc_service import server as grpc_server
 
 
 class DummyContext:
