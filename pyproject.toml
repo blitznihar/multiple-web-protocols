@@ -1,0 +1,35 @@
+[project]
+name = "multiple-web-protocols"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "grpcio>=1.76.0",
+    "grpcio-tools>=1.76.0",
+    "pydantic>=2.12.5",
+    "pymongo>=4.16.0",
+    "python-dotenv>=1.2.1",
+    "types-protobuf>=6.32.1.20251210",
+]
+
+
+
+[project.scripts]
+grpc = "grpc_service:main"
+websocket = "websocket:main"
+mcp = "mcp:main"
+
+[tool.uv.workspace]
+members = [
+    "grpc",
+]
+
+[dependency-groups]
+dev = [
+    "pip-audit>=2.10.0",
+    "pylint>=4.0.4",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.14.14",
+]

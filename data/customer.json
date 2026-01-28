@@ -1,0 +1,116 @@
+{
+    "customers":[
+        {
+            "customerid": "12345",
+            "firstname": "John",
+            "lastname": "Doe",
+            "email": "john.doe@example.com",
+            "phone": "+1-555-1234",
+            "address": {
+                "street": "123 Main St",
+                "city": "Anytown",
+                "state": "CA",
+                "zip": "12345",
+                "country": "USA"
+            }
+        },
+        {
+            "customerid": "67890",
+            "firstname": "Jane",
+            "lastname": "Smith",
+            "email": "jane.smith@example.com",
+            "phone": "+1-555-5678",
+            "address": {
+                "street": "456 Oak Ave",
+                "city": "Othertown",
+                "state": "NY",
+                "zip": "67890",
+                "country": "USA"
+            }
+        },
+        {
+            "customerid": "54321",
+            "firstname": "Alice",
+            "lastname": "Johnson",
+            "email": "alice.johnson@example.com",
+            "phone": "+1-555-9012",
+            "address": {
+                "street": "789 Pine Rd",
+                "city": "Sometown",
+                "state": "TX",
+                "zip": "54321",
+                "country": "USA"
+            }
+        },
+        {
+            "customerid": "98765",
+            "firstname": "Bob",
+            "lastname": "Brown",
+            "email": "bob.brown@example.com",
+            "phone": "+1-555-3456",
+            "address": {
+                "street": "321 Cedar St",
+                "city": "Newcity",
+                "state": "FL",
+                "zip": "98765",
+                "country": "USA"
+            }
+        },
+        {
+            "customerid": "11223",
+            "firstname": "Charlie",
+            "lastname": "Davis",
+            "email": "charlie.davis@example.com",
+            "phone": "+1-555-7890",
+            "address": {
+                "street": "654 Maple St",
+                "city": "Oldtown",
+                "state": "WA",
+                "zip": "11223",
+                "country": "USA"
+            }
+        },
+        {
+            "customerid": "33445",
+            "firstname": "Eve",
+            "lastname": "Wilson",
+            "email": "eve.wilson@example.com",
+            "phone": "+1-555-2345",
+            "address": {
+                "street": "987 Birch Ln",
+                "city": "Newville",
+                "state": "OR",
+                "zip": "33445",
+                "country": "USA"
+            }
+        },
+        {
+            "customerid": "55667",
+            "firstname": "Frank",
+            "lastname": "Miller",
+            "email": "frank.miller@example.com",
+            "phone": "+1-555-6789",
+            "address": {
+                "street": "321 Elm St",
+                "city": "Oldville",
+                "state": "NV",
+                "zip": "55667",
+                "country": "USA"
+            }
+        },
+        {
+            "customerid": "77889",
+            "firstname": "Grace",
+            "lastname": "Taylor",
+            "email": "grace.taylor@example.com",
+            "phone": "+1-555-0123",
+            "address": {
+                "street": "123 Spruce St",
+                "city": "Newtown",
+                "state": "CO",
+                "zip": "77889",
+                "country": "USA"
+            }
+        }
+    ]
+}

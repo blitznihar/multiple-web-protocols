@@ -1,0 +1,180 @@
+# Multiple Web Protocols
+
+[![CI (lint + test)](https://github.com/blitznihar/multiple-web-protocols/actions/workflows/pylint.yml/badge.svg)](https://github.com/blitznihar/multiple-web-protocols/actions/workflows/pylint.yml)
+[![codecov](https://codecov.io/github/blitznihar/multiple-web-protocols/graph/badge.svg?token=CxxB9Ew6Lx)](https://codecov.io/github/blitznihar/multiple-web-protocols)
+![Python](https://img.shields.io/badge/python-3.11%2B-blue)
+![Last Commit](https://img.shields.io/github/last-commit/blitznihar/multiple-web-protocols)
+![License](https://img.shields.io/github/license/blitznihar/multiple-web-protocols?cacheSeconds=0)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+## Overview
+
+This repository is a learning/demo project that implements a simple **Customer** service backed by **MongoDB**, exposed over multiple web protocols.
+
+The goal is to show how the same domain and persistence layer (a small customer database) can be accessed through different integration styles:
+
+- A fully implemented **gRPC** service
+- Planned/placeholder entry points for **WebSocket**, **Webhook**, **GraphQL**, and **MCP** (Model Context Protocol)
+
+All variants share the same MongoDB-backed `CustomerDB` abstraction for CRUD operations.
+
+## Architecture
+
+- **Domain model**
+	- `db/customer.py` defines a `Customer` Pydantic model (with an optional `Address`).
+	- `db/address.py` holds the address model used by `Customer`.
+
+- **Persistence layer**
+	- `db/customer_db.py` wraps a `pymongo.MongoClient` and exposes:
+		- `create_customer(customer: dict) -> str`
+		- `get_customer_by_id(customerid: str) -> dict | None`
+		- `list_customers() -> list[dict]`
+		- `update_customer(customerid: str, updates: dict) -> bool`
+		- `delete_customer(customerid: str) -> bool`
+
+- **Protocols**
+	- **gRPC** (implemented)
+		- Service definition in `grpc_service/proto/customer.proto`.
+		- Generated code in `grpc_service/customerpb/`.
+		- Server implementation in `grpc_service/server.py` wrapping `CustomerDB`.
+		- Exposes CRUD RPCs: `CreateCustomer`, `GetCustomerById`, `UpdateCustomer`, `DeleteCustomer`.
+	- **WebSocket** (placeholder)
+		- `websocket/__main__.py` currently prints a greeting and is a scaffold for a future WebSocket implementation.
+	- **Webhook** (placeholder)
+		- `webhook/__main__.py` currently prints a greeting and is a scaffold for incoming HTTP/webhook style integrations.
+	- **GraphQL** (placeholder)
+		- `graphql/__main__.py` currently prints a greeting and will eventually host a GraphQL API for the same `Customer` domain.
+	- **MCP** (placeholder)
+		- `mcp/__main__.py` is a placeholder for exposing the customer service via the Model Context Protocol.
+
+- **Top-level demo**
+	- `__main__.py` demonstrates the raw usage of `CustomerDB` (create, read, list, update, delete) when you run the project directly.
+
+- **Infrastructure**
+	- `docker-compose.yml` starts a local **MongoDB 7** instance with:
+		- Database: `customerdb`
+		- Initial data loaded from `data/customer.json` via `data/script/mongo-init.js`.
+
+## Requirements
+
+- Python ≥ 3.11 (project targets modern Python and uses type hints and Pydantic v2).
+- A running MongoDB instance (or the included Docker Compose setup).
+
+Recommended tooling (already configured in the project):
+
+- [uv](https://github.com/astral-sh/uv) for dependency and environment management.
+- `ruff`, `pylint`, and `pytest` for linting and testing.
+
+## Getting Started
+
+### 1. Start MongoDB with Docker
+
+From the project root:
+
+```bash
+docker compose up -d
+```
+
+This will:
+
+- Start `mongodb` on `localhost:27017`.
+- Create the `customerdb` database.
+- Seed it with sample data from `data/customer.json`.
+
+### 2. Create / Activate the Virtual Environment (optional if you already use uv)
+
+Using `uv` (recommended):
+
+```bash
+uv sync
+```
+
+This installs the dependencies declared in `pyproject.toml` and prepares a virtual environment.
+
+To run commands inside that environment:
+
+```bash
+uv run <command>
+```
+
+Example:
+
+```bash
+uv run .
+```
+
+will run the package's `__main__.py` and execute the simple `CustomerDB` CRUD demo.
+
+## Running the gRPC Service
+
+### 1. Generate gRPC Stubs (if needed)
+
+The generated files already live in `grpc_service/customerpb/`. If you change `grpc_service/proto/customer.proto`, you can regenerate them with:
+
+```bash
+cd grpc_service
+./generate.sh
+cd -
+```
+
+### 2. Start the gRPC Server
+
+From the project root:
+
+```bash
+uv run python -m grpc_service.server
+```
+
+The server will listen on `localhost:50051` and log:
+
+```text
+✅ gRPC server running on :50051
+```
+
+### 3. Call the gRPC API
+
+You can either:
+
+- Use `grpcurl` from the command line, or
+- Use the example client in `grpc_service/client.py` once implemented.
+
+At a high level, the service supports:
+
+- `CreateCustomer` – create a new customer with optional address.
+- `GetCustomerById` – fetch a customer document by `customerid`.
+- `UpdateCustomer` – partial updates on basic fields and nested address fields.
+- `DeleteCustomer` – delete a customer by `customerid`.
+
+## Running Other Protocol Entry Points
+
+These modules are currently simple placeholders that just print a greeting, but the project wiring is already in place via `pyproject.toml` script entries:
+
+```bash
+uv run grpc       # mapped to grpc_service:main (once main is implemented)
+uv run websocket  # mapped to websocket:main
+uv run mcp        # mapped to mcp:main
+```
+
+You can use these as starting points to flesh out full implementations for each protocol while reusing the shared `CustomerDB` persistence layer.
+
+## Development
+
+Install development dependencies:
+
+```bash
+uv sync --group dev
+```
+
+Run linters and tests:
+
+```bash
+uv run ruff check .
+uv run pylint multiple-web-protocols  # or the relevant package path
+uv run pytest
+```
+
+The repository is configured with a GitHub Actions workflow for linting and testing, and Codecov for coverage reporting.
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
