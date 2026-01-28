@@ -1,6 +1,6 @@
 [console_scripts]
 amqp = amqp:main
-graphql = graphql:main
+graphql = graphql_service:main
 grpc = grpc_service:main
 mcp = mcp:main
 mqtt = mqtt:main

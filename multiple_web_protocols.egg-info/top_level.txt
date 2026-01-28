@@ -1,7 +1,7 @@
 amqp
 config
 db
-graphql
+graphql_service
 grpc_service
 mcp
 mqtt
