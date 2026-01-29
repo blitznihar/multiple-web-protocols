@@ -9,4 +9,5 @@ rest
 soap
 sse
 webhook
+webhook_receiver
 websocket

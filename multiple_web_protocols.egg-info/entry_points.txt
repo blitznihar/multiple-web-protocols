@@ -8,4 +8,5 @@ rest = rest:main
 soap = soap:main
 sse = sse:main
 webhook = webhook:main
+webhook_receiver = webhook_receiver:main
 websocket = websocket:main

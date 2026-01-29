@@ -101,3 +101,8 @@ class EnvConfig:
     def host_address(self) -> str:
         """Get the host address from environment variables."""
         return os.getenv("HOST_ADDRESS", "0.0.0.0")
+
+    @property
+    def webhook_receiver_port(self) -> int:
+        """Get the Webhook Receiver port from environment variables."""
+        return int(os.getenv("WEBHOOK_RECEIVER_PORT", "8072"))

@@ -10,7 +10,7 @@ db/customer.py
 db/customer_db.py
 graphql_service/__init__.py
 graphql_service/__main__.py
-graphql_service/graphql_service.py
+graphql_service/schema.py
 grpc_service/__init__.py
 grpc_service/__main__.py
 grpc_service/client.py
@@ -43,5 +43,18 @@ tests/test_grpc_server.py
 tests/test_rest_app.py
 webhook/__init__.py
 webhook/__main__.py
+webhook/dispatcher.py
+webhook/kafka_consumer.py
+webhook/main.py
+webhook/models.py
+webhook/mongo.py
+webhook/registry.py
+webhook/rules.py
+webhook_receiver/__init__.py
+webhook_receiver/__main__.py
 websocket/__init__.py
 websocket/__main__.py
+websocket/kafka_consumer.py
+websocket/models.py
+websocket/service.py
+websocket/ws_manager.py

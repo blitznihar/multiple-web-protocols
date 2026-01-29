@@ -5,20 +5,23 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "aiokafka>=0.13.0",
     "email-validator>=2.3.0",
     "fastapi>=0.104.1",
     "grpcio>=1.76.0",
     "grpcio-tools>=1.76.0",
     "gunicorn>=24.1.1",
     "lxml>=6.0.2",
+    "motor>=3.7.1",
     "pydantic>=2.12.5",
     "pymongo>=4.16.0",
     "python-dotenv>=1.2.1",
     "pytz>=2025.2",
     "spyne>=2.14.0",
     "strawberry-graphql[fastapi]>=0.289.8",
+    "tenacity>=9.1.2",
     "types-protobuf>=6.32.1.20251210",
-    "uvicorn>=0.24.0",
+    "uvicorn[standard]>=0.24.0",
 ]
 [dependency-groups]
 dev = [
@@ -42,7 +45,7 @@ amqp = "amqp:main"
 sse = "sse:main"
 mqtt = "mqtt:main"
 soap = "soap:main"
-
+webhook_receiver = "webhook_receiver:main"
 
 
 
