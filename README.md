@@ -16,7 +16,10 @@ The goal is to show how the same domain and persistence layer (a small customer 
 - A fully implemented **gRPC** service
 - A fully implemented **REST** API (FastAPI)
 - A fully implemented **SOAP** service (using Spyne)
-- Planned/placeholder entry points for **WebSocket**, **Webhook**, **GraphQL**, **MCP** (Model Context Protocol), **AMQP**, **MQTT**, and **SSE**
+- A fully implemented **WebSocket** service for real-time event broadcasting
+- A fully implemented **Webhook** service for event-driven HTTP callbacks
+- A fully implemented **Webhook Receiver** service for receiving and logging webhooks
+- Planned/placeholder entry points for **GraphQL**, **MCP** (Model Context Protocol), **AMQP**, **MQTT**, and **SSE**
 
 All variants share the same MongoDB-backed `CustomerDB` abstraction for CRUD operations.
 
@@ -58,12 +61,21 @@ All variants share the same MongoDB-backed `CustomerDB` abstraction for CRUD ope
 			- `get_customer` – fetch a customer by ID.
 			- `update_customer_email` – update a customer's email.
 			- `delete_customer` – delete a customer by ID.
-	- **WebSocket** (placeholder)
-		- `websocket/__main__.py` currently prints a greeting and is a scaffold for a future WebSocket implementation.
-	- **Webhook** (placeholder)
-		- `webhook/__main__.py` currently prints a greeting and is a scaffold for incoming HTTP/webhook style integrations.
-	- **GraphQL** (placeholder)
-		- `graphql/__main__.py` currently prints a greeting and will eventually host a GraphQL API for the same `Customer` domain.
+- **WebSocket** (implemented)
+	- WebSocket service in `websocket/service.py` providing real-time event broadcasting via Kafka.
+	- Consumes events from Kafka topic `player-events` and broadcasts to connected WebSocket clients.
+	- Endpoint: `ws://localhost:8068/ws`
+- **Webhook** (implemented)
+	- Webhook dispatcher service in `webhook/main.py` for event-driven HTTP callbacks.
+	- Manages webhook subscriptions and dispatches events to registered URLs based on event types.
+	- Uses MongoDB for subscription storage and Kafka for event consumption.
+	- Endpoints: `/health`, `/webhooks` (GET, POST, DELETE)
+- **Webhook Receiver** (implemented)
+	- Simple webhook receiver service in `webhook_receiver/service.py` for receiving and logging incoming webhooks.
+	- Logs headers and body of received webhook payloads.
+	- Endpoint: `POST /hook`
+- **GraphQL** (placeholder)
+	- `graphql_service/__main__.py` currently prints a greeting and will eventually host a GraphQL API for the same `Customer` domain.
 	- **MCP** (placeholder)
 		- `mcp/__main__.py` is a placeholder for exposing the customer service via the Model Context Protocol.
 	- **AMQP** (placeholder)
@@ -107,7 +119,20 @@ This will:
 - Create the `customerdb` database.
 - Seed it with sample data from `data/customer.json`.
 
-### 2. Create / Activate the Virtual Environment (optional if you already use uv)
+### 2. Start Kafka (for WebSocket and Webhook services)
+
+For the WebSocket and Webhook services, which consume events from Kafka:
+
+```bash
+docker compose -f docker-compose.kafka.yml up -d
+```
+
+This will:
+
+- Start Kafka on `localhost:9092`.
+- Start Kafka UI on `http://localhost:8080` for monitoring topics and messages.
+
+### 3. Create / Activate the Virtual Environment (optional if you already use uv)
 
 Using `uv` (recommended):
 
@@ -216,6 +241,58 @@ Example operations (using a SOAP client or tools like SoapUI):
 - `update_customer_email` – update a customer's email.
 - `delete_customer` – delete a customer by ID.
 
+## Running the Webhook Service
+
+From the project root:
+
+```bash
+uv run webhook
+```
+
+This starts a FastAPI webhook dispatcher service, by default on `http://0.0.0.0:8069`, via `webhook.__main__.py`.
+
+The service consumes events from the `player-events` Kafka topic and dispatches HTTP POST requests to registered webhook URLs based on event types.
+
+Endpoints:
+
+- `GET /health` – health check.
+- `GET /webhooks` – list all webhook subscriptions.
+- `POST /webhooks` – create a new webhook subscription (requires `url`, `event_types`, `secret`, optional `player_id`).
+- `DELETE /webhooks/{subscription_id}` – disable a webhook subscription.
+
+## Running the WebSocket Service
+
+From the project root:
+
+```bash
+uv run websocket
+```
+
+This starts a FastAPI WebSocket service, by default on `http://0.0.0.0:8068`, via `websocket.__main__.py`.
+
+The service provides a WebSocket endpoint at `/ws` and broadcasts events consumed from the `player-events` Kafka topic to all connected clients.
+
+Endpoints:
+
+- `GET /health` – health check.
+- `WS /ws` – WebSocket connection for receiving real-time events.
+
+## Running the Webhook Receiver
+
+From the project root:
+
+```bash
+uv run webhook_receiver
+```
+
+This starts a simple FastAPI webhook receiver service, by default on `http://0.0.0.0:8072`, via `webhook_receiver.__main__.py`.
+
+The service logs incoming webhook payloads (headers and body) to the console.
+
+Endpoint:
+
+- `POST /hook` – receive and log webhook data.
+
 ## Running Other Protocol Entry Points
 
 These modules are currently simple placeholders that just print a greeting, but the project wiring is already in place via `pyproject.toml` script entries:
@@ -224,9 +301,10 @@ These modules are currently simple placeholders that just print a greeting, but 
 uv run grpc       # mapped to grpc_service:main (implemented)
 uv run rest       # mapped to rest:main (implemented)
 uv run soap       # mapped to soap:main (implemented)
-uv run websocket  # mapped to websocket:main (placeholder)
-uv run webhook    # mapped to webhook:main (placeholder)
-uv run graphql    # mapped to graphql:main (placeholder)
+uv run websocket  # mapped to websocket:main (implemented)
+uv run webhook    # mapped to webhook:main (implemented)
+uv run webhook_receiver  # mapped to webhook_receiver:main (implemented)
+uv run graphql    # mapped to graphql_service:main (placeholder)
 uv run mcp        # mapped to mcp:main (placeholder)
 uv run amqp       # mapped to amqp:main (placeholder)
 uv run mqtt       # mapped to mqtt:main (placeholder)
@@ -268,6 +346,40 @@ uv run pytest
 ```
 
 The repository is configured with a GitHub Actions workflow for linting and testing, and Codecov for coverage reporting.
+
+## Testing Event-Driven Services
+
+The WebSocket and Webhook services rely on Kafka for event consumption. To test them:
+
+1. Ensure MongoDB and Kafka are running (see Getting Started).
+
+2. Start the desired service(s), e.g., `uv run webhook` and/or `uv run websocket`.
+
+3. Publish test events to Kafka using the provided script:
+
+   ```bash
+   uv run python data/script/publish_event.py
+   ```
+
+   This publishes 100 sample `player.score.updated` events to the `player-events` topic.
+
+4. For Webhook testing:
+   - Register a webhook subscription by POSTing to `http://localhost:8069/webhooks` with JSON payload like:
+     ```json
+     {
+       "url": "http://localhost:8072/hook",
+       "event_types": ["player.score.updated"],
+       "secret": "test-secret"
+     }
+     ```
+   - Start the webhook receiver: `uv run webhook_receiver`.
+   - Publish events; the receiver should log incoming webhooks.
+
+5. For WebSocket testing:
+   - Connect to `ws://localhost:8068/ws` using a WebSocket client (e.g., browser console or tools like `websocat`).
+   - Publish events; connected clients should receive the events in real-time.
+
+6. Monitor Kafka topics via Kafka UI at `http://localhost:8080`.
 
 ## License
 

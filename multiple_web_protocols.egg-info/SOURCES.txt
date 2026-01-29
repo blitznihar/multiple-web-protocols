@@ -41,6 +41,9 @@ tests/test_customer_service.py
 tests/test_envconfig.py
 tests/test_grpc_server.py
 tests/test_rest_app.py
+tests/test_webhook.py
+tests/test_webhook_receiver.py
+tests/test_websocket.py
 webhook/__init__.py
 webhook/__main__.py
 webhook/dispatcher.py
@@ -52,6 +55,7 @@ webhook/registry.py
 webhook/rules.py
 webhook_receiver/__init__.py
 webhook_receiver/__main__.py
+webhook_receiver/service.py
 websocket/__init__.py
 websocket/__main__.py
 websocket/kafka_consumer.py
