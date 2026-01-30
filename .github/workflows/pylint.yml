@@ -108,13 +108,13 @@ jobs:
 
       # --- 6. ARTIFACT MANAGEMENT: GitHub Packages (Replaces JFrog) ---
       - name: Build & Publish to GitHub Packages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && matrix.python-version == '3.11'
         run: |
           uv build
           # We use the built-in GITHUB_TOKEN for authentication
           # GitHub Packages uses the same URL structure as PyPI but hosted by GitHub
           # Use the owner-level PyPI endpoint
-          export UV_PUBLISH_URL="https://pypi.pkg.github.com/${{ github.repository_owner }}"
+          export UV_PUBLISH_URL="https://pypi.pkg.github.com/${{ github.repository_owner }}/"
           export UV_PUBLISH_USERNAME="${{ github.actor }}"
           export UV_PUBLISH_PASSWORD="${{ secrets.GITHUB_TOKEN }}"
           uv publish
