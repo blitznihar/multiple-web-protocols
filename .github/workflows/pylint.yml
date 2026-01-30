@@ -114,7 +114,7 @@ jobs:
           # We use the built-in GITHUB_TOKEN for authentication
           # GitHub Packages uses the same URL structure as PyPI but hosted by GitHub
           # Use the owner-level PyPI endpoint
-          export UV_PUBLISH_URL="https://pypi.pkg.github.com/${{ github.repository }}"
+          export UV_PUBLISH_URL="https://pypi.pkg.github.com/${{ github.repository_owner }}"
           export UV_PUBLISH_USERNAME="${{ github.actor }}"
           export UV_PUBLISH_PASSWORD="${{ secrets.GITHUB_TOKEN }}"
           uv publish
