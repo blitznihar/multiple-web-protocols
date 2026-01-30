@@ -74,16 +74,22 @@ All variants share the same MongoDB-backed `CustomerDB` abstraction for CRUD ope
 	- Simple webhook receiver service in `webhook_receiver/service.py` for receiving and logging incoming webhooks.
 	- Logs headers and body of received webhook payloads.
 	- Endpoint: `POST /hook`
-- **GraphQL** (placeholder)
-	- `graphql_service/__main__.py` currently prints a greeting and will eventually host a GraphQL API for the same `Customer` domain.
-	- **MCP** (placeholder)
-		- `mcp/__main__.py` is a placeholder for exposing the customer service via the Model Context Protocol.
+- **GraphQL** (implemented)
+	- GraphQL API implemented using FastAPI and Strawberry GraphQL, exposing the same `Customer` domain.
+	- Schema includes queries: `getCustomer(customerid: String!)` and `listCustomers`.
+	- Endpoint: `/graphql` (GraphQL playground available).
+	- Uses the same `CustomerDB` for persistence.
+	- **MCP** (implemented)
+	- Model Context Protocol server implemented using FastMCP, exposing customer CRUD operations and event publishing.
+	- Tools: `customer_init_indexes`, `customer_create`, `customer_get`, `customer_update`, `customer_delete`, `customer_list`, `player_publish_score_updated`, `player_publish_event`.
+	- Runs over HTTP transport.
+	- Uses async MongoDB client and Kafka producer for events.
 	- **AMQP** (placeholder)
 		- `amqp/__main__.py` is a placeholder for AMQP-based messaging.
 	- **MQTT** (placeholder)
 		- `mqtt/__main__.py` is a placeholder for MQTT-based messaging.
-	- **SSE** (placeholder)
-		- `sse/__main__.py` is a placeholder for Server-Sent Events.
+	- **SSE** (implemented)
+		- Server-Sent Events service implemented using FastMCP with SSE transport, providing the same MCP tools over Server-Sent Events.
 
 - **Top-level demo**
 	- `__main__.py` demonstrates the raw usage of `CustomerDB` (create, read, list, update, delete) when you run the project directly.
@@ -293,9 +299,86 @@ Endpoint:
 
 - `POST /hook` – receive and log webhook data.
 
+## Running the GraphQL Service
+
+From the project root:
+
+```bash
+uv run graphql
+```
+
+This starts a FastAPI/Strawberry GraphQL server, by default on `http://0.0.0.0:8061`, via `graphql_service/__main__.py`.
+
+The GraphQL playground is available at: `http://localhost:8061/graphql`
+
+Example queries:
+
+```graphql
+query GetCustomer($customerid: String!) {
+  getCustomer(customerid: $customerid) {
+    customerid
+    firstname
+    lastname
+    email
+    phone
+    address {
+      street
+      city
+      state
+      zip
+      country
+    }
+  }
+}
+
+query ListCustomers {
+  listCustomers {
+    customerid
+    firstname
+    lastname
+    email
+  }
+}
+```
+
+## Running the MCP Service
+
+From the project root:
+
+```bash
+uv run mcp
+```
+
+This starts a FastMCP server over HTTP, by default on `http://0.0.0.0:8062`, via `mcp_service/__main__.py`.
+
+The MCP server exposes tools for customer CRUD operations and event publishing.
+
+Available tools:
+
+- `customer_init_indexes` – Create MongoDB indexes for customers.
+- `customer_create` – Create a new customer.
+- `customer_get` – Get customer by ID.
+- `customer_update` – Update customer fields.
+- `customer_delete` – Delete customer by ID.
+- `customer_list` – List customers.
+- `player_publish_score_updated` – Publish score update event to Kafka.
+- `player_publish_event` – Publish custom player event to Kafka.
+
+## Running the SSE Service
+
+From the project root:
+
+```bash
+uv run sse
+```
+
+This starts a FastMCP server over Server-Sent Events, by default on `http://0.0.0.0:8063`, via `sse/__main__.py`.
+
+Provides the same MCP tools as above, but over SSE transport for real-time streaming.
+
 ## Running Other Protocol Entry Points
 
-These modules are currently simple placeholders that just print a greeting, but the project wiring is already in place via `pyproject.toml` script entries:
+Some modules are fully implemented, while others are placeholders that just print a greeting. The project wiring is in place via `pyproject.toml` script entries:
 
 ```bash
 uv run grpc       # mapped to grpc_service:main (implemented)
@@ -304,14 +387,14 @@ uv run soap       # mapped to soap:main (implemented)
 uv run websocket  # mapped to websocket:main (implemented)
 uv run webhook    # mapped to webhook:main (implemented)
 uv run webhook_receiver  # mapped to webhook_receiver:main (implemented)
-uv run graphql    # mapped to graphql_service:main (placeholder)
-uv run mcp        # mapped to mcp:main (placeholder)
+uv run graphql    # mapped to graphql_service:main (implemented)
+uv run mcp        # mapped to mcp_service:main (implemented)
 uv run amqp       # mapped to amqp:main (placeholder)
 uv run mqtt       # mapped to mqtt:main (placeholder)
-uv run sse        # mapped to sse:main (placeholder)
+uv run sse        # mapped to sse:main (implemented)
 ```
 
-You can use these as starting points to flesh out full implementations for each protocol while reusing the shared `CustomerDB` persistence layer.
+You can use these as starting points to flesh out full implementations for the remaining placeholder protocols while reusing the shared `CustomerDB` persistence layer.
 
 ## Development
 

@@ -88,6 +88,11 @@ class EnvConfig:
         return int(os.getenv("WEBHOOK_PORT", "8069"))
 
     @property
+    def sse_port(self) -> int:
+        """Get the SSE port from environment variables."""
+        return int(os.getenv("SSE_PORT", "8073"))
+
+    @property
     def host(self) -> str:
         """Get the host from environment variables."""
         return os.getenv("HOST", "localhost")
@@ -106,3 +111,18 @@ class EnvConfig:
     def webhook_receiver_port(self) -> int:
         """Get the Webhook Receiver port from environment variables."""
         return int(os.getenv("WEBHOOK_RECEIVER_PORT", "8072"))
+
+    @property
+    def kafka_bootstrap(self) -> str:
+        """Get the Kafka bootstrap servers from environment variables."""
+        return os.getenv("KAFKA_BOOTSTRAP", "localhost:9092")
+
+    @property
+    def kafka_topic(self) -> str:
+        """Get the Kafka topic from environment variables."""
+        return os.getenv("KAFKA_TOPIC", "player-events")
+
+    @property
+    def kafka_group_id(self) -> str:
+        """Get the Kafka group ID from environment variables."""
+        return os.getenv("KAFKA_GROUP_ID", "default-group")
