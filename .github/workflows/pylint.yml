@@ -82,11 +82,11 @@ jobs:
         # --- Secret scanning in CI (gitleaks) ---
         # Notes:- GitHub "Secret scanning" is also a platform feature (Repo Settings → Security).
         # - This step adds a CI gate to catch accidental secrets in commits/PRs.
-      # - name: Gitleaks Secret Scan
-      #   uses: gitleaks/gitleaks-action@v2
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "false"
+      - name: Gitleaks Secret Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "false"
 
       # --- 3. SCA: Trivy (Replaces Veracode SCA / Xray) ---
       # Trivy is faster and more comprehensive than pip-audit for CI
@@ -98,9 +98,9 @@ jobs:
           exit-code: '1' # Fails the build if vulnerabilities are found
           severity: 'CRITICAL,HIGH'
 
-      - name: Gitleaks Secret Scan (SARIF)
-        run: |
-          uv tool run gitleaks detect --source . --report-format sarif --report-path results.sarif --verbose
+      # - name: Gitleaks Secret Scan (SARIF)
+      #   run: |
+      #     uv tool run gitleaks detect --source . --report-format sarif --report-path results.sarif --verbose
 
       - name: Upload Gitleaks SARIF
         uses: actions/upload-artifact@v4
