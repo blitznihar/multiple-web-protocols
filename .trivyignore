@@ -1,0 +1,2 @@
+# Ignore protobuf DoS vulnerability until a patch is available
+CVE-2026-0994
