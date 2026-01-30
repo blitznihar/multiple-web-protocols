@@ -10,7 +10,6 @@ jobs:
     uses: blitznihar/github-actions-python-uv/.github/workflows/uv-ci.yml@main
     with:
       python-version-file: ".python-version"
-      secrets: inherit
       # OR use matrix:
       # python-versions-json: '["3.11","3.12","3.13"]'
       run-ruff: true
