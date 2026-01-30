@@ -18,7 +18,10 @@ The goal is to show how the same domain and persistence layer (a small customer 
 - A fully implemented **WebSocket** service for real-time event broadcasting
 - A fully implemented **Webhook** service for event-driven HTTP callbacks
 - A fully implemented **Webhook Receiver** service for receiving and logging webhooks
-- Planned/placeholder entry points for **GraphQL**, **MCP** (Model Context Protocol), **AMQP**, **MQTT**, and **SSE**
+- A fully implemented **GraphQL** service
+- A fully implemented **MCP** (Model Context Protocol) service
+- A fully implemented **SSE** service
+- Planned/placeholder entry points for **AMQP** and **MQTT**
 
 All variants share the same MongoDB-backed `CustomerDB` abstraction for CRUD operations.
 
@@ -78,17 +81,17 @@ All variants share the same MongoDB-backed `CustomerDB` abstraction for CRUD ope
 	- Schema includes queries: `getCustomer(customerid: String!)` and `listCustomers`.
 	- Endpoint: `/graphql` (GraphQL playground available).
 	- Uses the same `CustomerDB` for persistence.
-	- **MCP** (implemented)
+- **MCP** (implemented)
 	- Model Context Protocol server implemented using FastMCP, exposing customer CRUD operations and event publishing.
 	- Tools: `customer_init_indexes`, `customer_create`, `customer_get`, `customer_update`, `customer_delete`, `customer_list`, `player_publish_score_updated`, `player_publish_event`.
 	- Runs over HTTP transport.
 	- Uses async MongoDB client and Kafka producer for events.
-	- **AMQP** (placeholder)
-		- `amqp/__main__.py` is a placeholder for AMQP-based messaging.
-	- **MQTT** (placeholder)
-		- `mqtt/__main__.py` is a placeholder for MQTT-based messaging.
-	- **SSE** (implemented)
-		- Server-Sent Events service implemented using FastMCP with SSE transport, providing the same MCP tools over Server-Sent Events.
+- **AMQP** (placeholder)
+	- `amqp/__main__.py` is a placeholder for AMQP-based messaging.
+- **MQTT** (placeholder)
+	- `mqtt/__main__.py` is a placeholder for MQTT-based messaging.
+- **SSE** (implemented)
+	- Server-Sent Events service implemented using FastMCP with SSE transport, providing the same MCP tools over Server-Sent Events.
 
 - **Top-level demo**
 	- `__main__.py` demonstrates the raw usage of `CustomerDB` (create, read, list, update, delete) when you run the project directly.
