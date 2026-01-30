@@ -112,7 +112,7 @@ jobs:
           uv build
           # We use the built-in GITHUB_TOKEN for authentication
           # GitHub Packages uses the same URL structure as PyPI but hosted by GitHub
-          export UV_PUBLISH_URL="https://maven.pkg.github.com/${{ github.repository }}"
+          export UV_PUBLISH_URL="https://pypi.pkg.github.com/${{ github.repository }}"
           export UV_PUBLISH_USERNAME="${{ github.actor }}"
           export UV_PUBLISH_PASSWORD="${{ secrets.GITHUB_TOKEN }}"
           uv publish
