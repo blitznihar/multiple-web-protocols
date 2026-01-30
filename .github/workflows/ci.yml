@@ -5,6 +5,10 @@ name: CI
   push:
     branches: [ "main", "master" ]
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   ci:
     uses: blitznihar/github-actions-python-uv/.github/workflows/uv-ci.yml@main
