@@ -2,17 +2,10 @@ name: Release Please
 
 "on":
   push:
-    branches: ["main"]
-
-permissions:
-  contents: write
-  pull-requests: write
+    branches: [ "main" ]
 
 jobs:
-  release-please:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: googleapis/release-please-action@v4
-        with:
-          release-type: python
-          package-name: multiple-web-protocols
+  release:
+    uses: blitznihar/github-actions-python-uv/.github/workflows/uv-release-please.yml@main
+    with:
+      package-name: "multiple-web-protocols"

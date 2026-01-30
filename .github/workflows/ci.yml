@@ -1,0 +1,23 @@
+name: CI
+
+"on":
+  pull_request:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  ci:
+    uses: blitznihar/github-actions-python-uv/.github/workflows/uv-ci.yml@main
+    with:
+      python-version-file: ".python-version"
+      # OR use matrix:
+      # python-versions-json: '["3.11","3.12","3.13"]'
+      run-ruff: true
+      run-semgrep: true
+      run-tests: true
+      run-pip-audit: true
+      run-gitleaks: true
+      run-trivy: true
+      pip-audit-ignore: "CVE-2026-0994"   # matches what you had before
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
