@@ -21,6 +21,7 @@ dependencies = [
     "spyne>=2.14.0",
     "strawberry-graphql[fastapi]>=0.289.8",
     "tenacity>=9.1.2",
+    "twine>=6.2.0",
     "types-protobuf>=6.32.1.20251210",
     "uvicorn[standard]>=0.24.0",
 ]
@@ -63,3 +64,8 @@ include-package-data = false
 where = ["."]
 include = ["rest*", "db*", "grpc_service*", "webhook*", "graphql*", "websocket*", "mcp*", "amqp*", "sse*", "mqtt*", "soap*", "config*"]
 exclude = ["data*"]
+
+[project.urls]
+Homepage = "https://github.com/blitznihar/multiple-web-protocols"
+Repository = "https://github.com/blitznihar/multiple-web-protocols"
+Issues = "https://github.com/blitznihar/multiple-web-protocols/issues"

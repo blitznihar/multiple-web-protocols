@@ -21,6 +21,8 @@ grpc_service/customerpb/customer_pb2.py
 grpc_service/customerpb/customer_pb2_grpc.py
 mcp_service/__init__.py
 mcp_service/__main__.py
+mcp_service/models.py
+mcp_service/service.py
 mqtt/__init__.py
 mqtt/__main__.py
 multiple_web_protocols.egg-info/PKG-INFO
@@ -42,6 +44,7 @@ tests/test_customer_service.py
 tests/test_envconfig.py
 tests/test_grpc_server.py
 tests/test_rest_app.py
+tests/test_service.py
 tests/test_webhook.py
 tests/test_webhook_receiver.py
 tests/test_websocket.py
