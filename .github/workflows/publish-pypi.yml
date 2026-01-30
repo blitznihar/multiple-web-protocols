@@ -1,0 +1,26 @@
+name: Publish to PyPI
+
+"on":
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+  id-token: write   # for PyPI Trusted Publishing
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Build
+        run: uv build
+
+      - name: Publish
+        run: uv publish

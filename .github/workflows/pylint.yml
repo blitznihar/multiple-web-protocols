@@ -8,7 +8,6 @@ on:
 permissions:
   contents: read
   security-events: write
-  packages: write
 
 concurrency:
   group: lint-${{ github.ref }}
@@ -83,11 +82,11 @@ jobs:
         # --- Secret scanning in CI (gitleaks) ---
         # Notes:- GitHub "Secret scanning" is also a platform feature (Repo Settings → Security).
         # - This step adds a CI gate to catch accidental secrets in commits/PRs.
-      - name: Gitleaks Secret Scan
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "false"
+      # - name: Gitleaks Secret Scan
+      #   uses: gitleaks/gitleaks-action@v2
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "false"
 
       # --- 3. SCA: Trivy (Replaces Veracode SCA / Xray) ---
       # Trivy is faster and more comprehensive than pip-audit for CI
@@ -99,24 +98,15 @@ jobs:
           exit-code: '1' # Fails the build if vulnerabilities are found
           severity: 'CRITICAL,HIGH'
 
-      - name: Upload Gitleaks SARIF (unique per matrix)
+      - name: Gitleaks Secret Scan (SARIF)
+        run: |
+          uv tool run gitleaks detect --source . --report-format sarif --report-path results.sarif --verbose
+
+      - name: Upload Gitleaks SARIF
         uses: actions/upload-artifact@v4
         with:
-          name: gitleaks-sarif-${{ github.run_id }}-${{ matrix.os }}-py${{ matrix.python-version }}
+          name: gitleaks-sarif-${{ github.run_id }}-${{ runner.os }}-py${{ matrix.python-version }}
           path: results.sarif
           overwrite: true
-
-      # --- 6. ARTIFACT MANAGEMENT: GitHub Packages (Replaces JFrog) ---
-      - name: Build & Publish to GitHub Packages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && matrix.python-version == '3.11'
-        run: |
-          uv build
-          # We use the built-in GITHUB_TOKEN for authentication
-          # GitHub Packages uses the same URL structure as PyPI but hosted by GitHub
-          # Use the owner-level PyPI endpoint
-          export UV_PUBLISH_URL="https://pypi.pkg.github.com/${{ github.repository_owner }}/"
-          export UV_PUBLISH_USERNAME="${{ github.actor }}"
-          export UV_PUBLISH_PASSWORD="${{ secrets.GITHUB_TOKEN }}"
-          uv publish
 
 
