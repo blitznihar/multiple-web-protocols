@@ -54,6 +54,12 @@ jobs:
       - name: Ruff (format check)
         run: uv run ruff format --check .
 
+      # --- 1. SAST: Semgrep (Replaces CodeQL/SonarQube) ---
+      - name: Semgrep OSS Scan
+        run: |
+          uv pip install semgrep
+          uv run semgrep scan --error --config auto
+
       # Pylint can be noisy without a config. This runs it against your package under src/
       # Update the module path if your package name differs.
       - name: Pylint
@@ -82,11 +88,33 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "false"
 
+      # --- 3. SCA: Trivy (Replaces Veracode SCA / Xray) ---
+      # Trivy is faster and more comprehensive than pip-audit for CI
+      - name: Trivy Dependency Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          security-checks: 'vuln,config'
+          exit-code: '1' # Fails the build if vulnerabilities are found
+          severity: 'CRITICAL,HIGH'
+
       - name: Upload Gitleaks SARIF (unique per matrix)
         uses: actions/upload-artifact@v4
         with:
           name: gitleaks-sarif-${{ github.run_id }}-${{ matrix.os }}-py${{ matrix.python-version }}
           path: results.sarif
           overwrite: true
+
+      # --- 6. ARTIFACT MANAGEMENT: GitHub Packages (Replaces JFrog) ---
+      - name: Build & Publish to GitHub Packages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          uv build
+          # We use the built-in GITHUB_TOKEN for authentication
+          # GitHub Packages uses the same URL structure as PyPI but hosted by GitHub
+          export UV_PUBLISH_URL=https://maven.pkg.github.com{{ github.repository }}
+          export UV_PUBLISH_USERNAME=${{ github.actor }}
+          export UV_PUBLISH_PASSWORD=${{ secrets.GITHUB_TOKEN }}
+          uv publish
 
 
