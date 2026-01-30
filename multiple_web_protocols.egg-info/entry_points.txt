@@ -2,7 +2,7 @@
 amqp = amqp:main
 graphql = graphql_service:main
 grpc = grpc_service:main
-mcp = mcp:main
+mcp = mcp_service:main
 mqtt = mqtt:main
 rest = rest:main
 soap = soap:main

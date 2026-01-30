@@ -4,9 +4,11 @@ Version: 0.1.0
 Summary: Add your description here
 Requires-Python: >=3.11
 Description-Content-Type: text/markdown
+License-File: LICENSE
 Requires-Dist: aiokafka>=0.13.0
 Requires-Dist: email-validator>=2.3.0
 Requires-Dist: fastapi>=0.104.1
+Requires-Dist: fastmcp>=2.14.4
 Requires-Dist: grpcio>=1.76.0
 Requires-Dist: grpcio-tools>=1.76.0
 Requires-Dist: gunicorn>=24.1.1
@@ -21,6 +23,7 @@ Requires-Dist: strawberry-graphql[fastapi]>=0.289.8
 Requires-Dist: tenacity>=9.1.2
 Requires-Dist: types-protobuf>=6.32.1.20251210
 Requires-Dist: uvicorn[standard]>=0.24.0
+Dynamic: license-file
 
 # Multiple Web Protocols
 

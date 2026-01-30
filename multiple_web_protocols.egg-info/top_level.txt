@@ -3,7 +3,7 @@ config
 db
 graphql_service
 grpc_service
-mcp
+mcp_service
 mqtt
 rest
 soap
