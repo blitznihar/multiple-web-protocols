@@ -1,0 +1,18 @@
+version: 2
+updates:
+  # 1. Python Dependencies (replaces Veracode SCA)
+  - package-ecosystem: "pip" 
+    directory: "/" # Location of pyproject.toml / uv.lock
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 10
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+
+  # 2. GitHub Actions (Keeps your security tools updated)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

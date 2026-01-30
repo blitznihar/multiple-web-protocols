@@ -57,8 +57,7 @@ jobs:
       # --- 1. SAST: Semgrep (Replaces CodeQL/SonarQube) ---
       - name: Semgrep OSS Scan
         run: |
-          uv pip install semgrep
-          uv run semgrep scan --error --config auto
+          uvx run semgrep scan --error --config auto
 
       # Pylint can be noisy without a config. This runs it against your package under src/
       # Update the module path if your package name differs.
